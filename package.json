@@ -1,7 +1,7 @@
 {
   "name": "npm-starter",
   "version": "0.3.0",
-  "description": "project starter for npm package",
+  "description": "project starter for npm module",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha",
