@@ -4,12 +4,17 @@ var mocha = require('gulp-spawn-mocha');
 var runSequence = require('run-sequence');
 var cache = require('gulp-cached');
 
+var scripts = {
+  src: 'src/**/*.js',
+  test: 'test/**/*.js'
+};
+
 /**
  * Testing
  */
 
 gulp.task('test', function() {
-  return gulp.src('test/**/*.test.js')
+  return gulp.src(scripts.test)
     .pipe(mocha({
       istanbul: { report: 'none' }
     }));
@@ -19,43 +24,36 @@ gulp.task('test', function() {
  * Linting
  */
 
-gulp.task('eslint-src', function () {
-  return gulp.src('src/**/*.js')
-    .pipe(cache('eslint', { optimizeMemory: true }))
-    .pipe(eslint({
-      configFile: '.eslintrc.js',
-      quiet: true
-    }))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
+function addLinterTask(name, path) {
+  gulp.task(name, function () {
+    return gulp.src(path)
+      .pipe(cache('eslint', { optimizeMemory: true }))
+      .pipe(eslint({
+        configFile: '.eslintrc.js',
+        quiet: true
+      }))
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+  });
+}
 
-gulp.task('eslint-test', function () {
-  return gulp.src('test/**/*.js')
-    .pipe(cache('eslint', { optimizeMemory: true }))
-    .pipe(eslint({
-      configFile: '.eslintrc.js',
-      quiet: true
-    }))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
+addLinterTask('eslint-src', scripts.src);
+addLinterTask('eslint-test', scripts.test);
 
 /**
  * Watch
  */
 
-gulp.task('watch-src', function() {
-  gulp.watch('src/**/*.js', function() {
-    runSequence.call(this, ['eslint-src', 'test']);
+function addWatchTask(name, path, tasks) {
+  gulp.task(name, function() {
+    gulp.watch(path, function() {
+      runSequence.call(this, tasks);
+    });
   });
-});
+}
 
-gulp.task('watch-test', function() {
-  gulp.watch('test/**/*.js', function() {
-    runSequence.call(this, ['eslint-test', 'test']);
-  });
-});
+addWatchTask('watch-src', scripts.src, ['eslint-src', 'test']);
+addWatchTask('watch-test', scripts.test, ['eslint-test', 'test']);
 
 /**
  * Tasks
