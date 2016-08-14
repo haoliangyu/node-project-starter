@@ -4,7 +4,9 @@
   "description": "project starter for npm package",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "compile": "babel --presets es2015 --minified -output-file dist/npm.module.js src/",
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",
