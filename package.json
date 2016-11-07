@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "mocha",
-    "compile": "babel --presets es2015 --minified -output-file dist/npm.module.js src/",
+    "compile": "gulp compile",
     "prepublish": "npm run compile"
   },
   "repository": {
@@ -29,8 +29,10 @@
     "eslint": "^3.9.1",
     "eslint-plugin-json": "^1.2.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-cached": "^1.1.0",
     "gulp-eslint": "^3.0.1",
+    "gulp-optimize-js": "^1.1.0",
     "gulp-spawn-mocha": "^3.1.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",

@@ -1,13 +1,30 @@
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var mocha = require('gulp-spawn-mocha');
-var runSequence = require('run-sequence');
-var cache = require('gulp-cached');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+const mocha = require('gulp-spawn-mocha');
+const runSequence = require('run-sequence');
+const cache = require('gulp-cached');
+const optimizejs = require('gulp-optimize-js');
+const babel = require('gulp-babel');
 
-var scripts = {
+const scripts = {
   src: 'src/**/*.js',
-  test: 'test/**/*.js'
+  test: 'test/**/*.js',
+  dist: 'dist'
 };
+
+/**
+ * Babel
+ */
+
+gulp.task('compile', () => {
+  return gulp.src(scripts.src)
+    .pipe(babel({
+      presets: ['es2015'],
+      minified: true
+    }))
+    .pipe(optimizejs())
+    .pipe(gulp.dest(scripts.dist));
+});
 
 /**
  * Testing
@@ -52,7 +69,7 @@ function addWatchTask(name, path, tasks) {
   });
 }
 
-addWatchTask('watch-src', scripts.src, ['eslint-src', 'test']);
+addWatchTask('watch-src', scripts.src, ['eslint-src', 'test', 'compile']);
 addWatchTask('watch-test', scripts.test, ['eslint-test', 'test']);
 
 /**
