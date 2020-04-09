@@ -23,7 +23,7 @@
   "homepage": "https://github.com/haoliangyu/npm-module-starter#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "husky": "^4.0.2",
+    "husky": "^4.2.4",
     "mocha": "^7.0.1",
     "prettier": "^2.0.0",
     "pretty-quick": "^2.0.0"
